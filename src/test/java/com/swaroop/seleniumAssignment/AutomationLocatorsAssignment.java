@@ -1,8 +1,7 @@
 package com.swaroop.seleniumAssignment;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
-
-
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,29 +9,32 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class AutomationLocatorsAssignment {
-	
+
 	WebDriver wd;
 
 	@BeforeMethod
 	public void openBrowser() {
 		System.setProperty("webdriver.chrome.driver", "E:\\QA Testing\\Lib\\ChromeDriver99\\chromedriver.exe");
 		wd = new ChromeDriver();
-		wd.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+		wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		wd.get("http://automationpractice.com/index.php?controller=authentication&back=my-account");
 		wd.manage().window().maximize();
 	}
+
 	@Test
-	public void signUpforAcount() {
+	public void verifySignUpFunctionality() {
 		WebElement emailInput = wd.findElement(By.cssSelector("#email_create"));
-		emailInput.sendKeys("456790@email.com");
+		emailInput.sendKeys(generateRandomChars("abcdefghijklmnopqrstuvwxyz", 8)+"@emal.com");
+		//System.out.println(generateRandomChars("abcdefghijklmnopqrstuvwxyz", 8)+"@emal.com");
 		WebElement clickCreateAccount = wd.findElement(By.cssSelector("#SubmitCreate"));
 		clickCreateAccount.click();
 		WebElement genderID = wd.findElement(By.cssSelector("#id_gender1"));
-		WebElement firstNameInput  = wd.findElement(By.cssSelector("#customer_firstname"));
+		WebElement firstNameInput = wd.findElement(By.cssSelector("#customer_firstname"));
 		WebElement lastNameInput = wd.findElement(By.cssSelector("#customer_lastname"));
 		WebElement passwordInput = wd.findElement(By.cssSelector("#passwd"));
 		WebElement dobDate = wd.findElement(By.cssSelector("#days"));
@@ -44,13 +46,13 @@ public class AutomationLocatorsAssignment {
 		WebElement lastNameAddress = wd.findElement(By.cssSelector("input[name = 'lastname']"));
 		WebElement companyInput = wd.findElement(By.cssSelector("#company"));
 		WebElement addressLine1 = wd.findElement(By.cssSelector("#address1"));
-		WebElement addressLine2 = wd.findElement(By.cssSelector("#address2")); 
+		WebElement addressLine2 = wd.findElement(By.cssSelector("#address2"));
 		WebElement cityInput = wd.findElement(By.cssSelector("#city"));
 		WebElement selectState = wd.findElement(By.cssSelector("#id_state"));
 		WebElement postalCodeInput = wd.findElement(By.cssSelector("input[ name = 'postcode']"));
 		WebElement countrySelect = wd.findElement(By.cssSelector("#id_country"));
 		WebElement additionalInput = wd.findElement(By.cssSelector("#other"));
-		WebElement homePhoneInput  = wd.findElement(By.cssSelector("#phone"));
+		WebElement homePhoneInput = wd.findElement(By.cssSelector("#phone"));
 		WebElement mobilePhoneInput = wd.findElement(By.cssSelector("#phone_mobile"));
 		WebElement addressAlias = wd.findElement(By.cssSelector("#alias"));
 		WebElement submitButton = wd.findElement(By.cssSelector(".submit.clearfix .icon-chevron-right.right"));
@@ -85,9 +87,24 @@ public class AutomationLocatorsAssignment {
 		addressAlias.clear();
 		addressAlias.sendKeys("Office");
 		submitButton.click();
-		WebElement submissionCheck = wd.findElement(By.cssSelector("div [class = 'page-heading']"));
-		Assert.assertEquals(submissionCheck.getText(), "MY ACCOUNT", "Submission Error");
-		
+		WebElement submissionCheck = wd.findElement(By.cssSelector(".account"));
+		Assert.assertEquals(submissionCheck.getText(), "Peter Parker", "Submission Error");
+
+	}
+
+//	@AfterMethod
+//	public void tearDown() {
+//		wd.quit();
+//	}
+
+	public String generateRandomChars(String candidateChars, int length) {
+		StringBuilder sb = new StringBuilder();
+		Random random = new Random();
+		for (int i = 0; i < length; i++) {
+			sb.append(candidateChars.charAt(random.nextInt(candidateChars.length())));
+		}
+
+		return sb.toString();
 	}
 
 }
