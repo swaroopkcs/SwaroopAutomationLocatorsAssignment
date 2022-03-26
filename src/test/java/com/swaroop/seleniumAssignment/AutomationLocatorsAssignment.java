@@ -7,7 +7,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -16,12 +18,14 @@ import org.testng.annotations.Test;
 public class AutomationLocatorsAssignment {
 
 	WebDriver wd;
+	WebDriverWait wdWait;
 
 	@BeforeMethod
 	public void openBrowser() {
 		System.setProperty("webdriver.chrome.driver", "E:\\QA Testing\\Lib\\ChromeDriver99\\chromedriver.exe");
 		wd = new ChromeDriver();
-		wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		wdWait = new WebDriverWait(wd, 20);
+		//wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		wd.get("http://automationpractice.com/index.php?controller=authentication&back=my-account");
 		wd.manage().window().maximize();
 	}
@@ -29,10 +33,12 @@ public class AutomationLocatorsAssignment {
 	@Test
 	public void verifySignUpFunctionality() {
 		WebElement emailInput = wd.findElement(By.cssSelector("#email_create"));
-		emailInput.sendKeys(generateRandomChars("abcdefghijklmnopqrstuvwxyz", 8)+"@emal.com");
+		emailInput.sendKeys("spider@emal.com");
+		//emailInput.sendKeys(generateRandomChars("abcdefghijklmnopqrstuvwxyz", 8)+"@emal.com");
 		//System.out.println(generateRandomChars("abcdefghijklmnopqrstuvwxyz", 8)+"@emal.com");
 		WebElement clickCreateAccount = wd.findElement(By.cssSelector("#SubmitCreate"));
 		clickCreateAccount.click();
+		wdWait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#id_gender1")));
 		WebElement genderID = wd.findElement(By.cssSelector("#id_gender1"));
 		WebElement firstNameInput = wd.findElement(By.cssSelector("#customer_firstname"));
 		WebElement lastNameInput = wd.findElement(By.cssSelector("#customer_lastname"));
@@ -82,8 +88,8 @@ public class AutomationLocatorsAssignment {
 		select = new Select(countrySelect);
 		select.selectByValue("21");
 		additionalInput.sendKeys("Hello");
-		homePhoneInput.sendKeys("4567890123");
-		mobilePhoneInput.sendKeys("7890123456");
+		homePhoneInput.sendKeys(generateRandomChars("1234567890", 10));
+		mobilePhoneInput.sendKeys(generateRandomChars("1234567890", 10));
 		addressAlias.clear();
 		addressAlias.sendKeys("Office");
 		submitButton.click();
